@@ -45,3 +45,49 @@ def get_summaries():
         })
 
     return jsonify(result)
+@routes.route("/summaries/<int:id>", methods=["GET"])
+def get_summary(id):
+
+    record = Summary.query.get(id)
+
+    if not record:
+        return jsonify({"error": "Summary not found"}), 404
+
+    return jsonify({
+        "id": record.id,
+        "url": record.url,
+        "summary": record.summary
+    })
+@routes.route("/summaries/<int:id>", methods=["PUT"])
+def update_summary(id):
+
+    record = Summary.query.get(id)
+
+    if not record:
+        return jsonify({"error": "Summary not found"}), 404
+
+    data = request.json
+    new_url = data.get("url")
+
+    text = scrape_website(new_url)
+    summary = summarize_text(text)
+
+    record.url = new_url
+    record.content = text
+    record.summary = summary
+
+    db.session.commit()
+
+    return jsonify({"message": "Summary updated"})
+@routes.route("/summaries/<int:id>", methods=["DELETE"])
+def delete_summary(id):
+
+    record = Summary.query.get(id)
+
+    if not record:
+        return jsonify({"error": "Summary not found"}), 404
+
+    db.session.delete(record)
+    db.session.commit()
+
+    return jsonify({"message": "Summary deleted"})

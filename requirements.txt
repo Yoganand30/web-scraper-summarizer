@@ -1,6 +1,6 @@
-flask
-flask_sqlalchemy
-flask_migrate
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
 psycopg2-binary
 requests
 beautifulsoup4
