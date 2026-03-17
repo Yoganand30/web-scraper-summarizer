@@ -6,6 +6,19 @@ from .database import db
 
 routes = Blueprint("routes", __name__)
 
+@routes.route("/")
+def home():
+    return {
+        "message": "Web Scraper Summarizer API 🚀",
+        "endpoints": [
+            "GET /summaries",
+            "POST /summaries",
+            "GET /summaries/<id>",
+            "PUT /summaries/<id>",
+            "DELETE /summaries/<id>"
+        ]
+    }
+
 @routes.route("/summaries", methods=["POST"])
 def create_summary():
 
